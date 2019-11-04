@@ -27,23 +27,6 @@ $(function () {
   })
 
   //3.根据id查询指定文章类别
-  $('#categoryBox').on('click', '.edit', function () {
-    var id = $(this).attr('data-id')
-    $.ajax({
-      url: 'http://47.111.184.55:8888/api/v1/admin/category/search',
-      type: 'get',
-      data: { id },
-      success: function (data) {
-        console.log(data)
-        var html = template('editTpl', data.data[0])
-        $('#addModalBox').html(html);
-      }
-    })
-    $('#addModal').on('click', '#model_shutoend', function () {
-      $('#addModal').modal('hide');
-    })
-  })
-
   // 点击编辑按钮
   $('#tplBox').on('click', '.modify', function () {
     var id = $(this).attr('data-id')
@@ -62,7 +45,7 @@ $(function () {
     })
     $('#addModal').modal('show');
   })
-  
+
   $('#addModal').on('click', '#model_shutoend', function () {
     $('#addModal').modal('hide');
   });
