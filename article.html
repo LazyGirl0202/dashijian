@@ -80,18 +80,27 @@
         下一篇： <a href="#">世界第一个可以玩游戏的马桶、世界上第一个可以玩游戏的茶杯</a>
       </div>
 
-      <form action="" class="comment_form">
+
+
+      <form action="" class="comment_form" id="comment_formBox">
         <div class="form_group">
           <label>用户名：</label>
-          <input type="text" placeholder="请输入用户名" class="comment_name">
+          <input type="text" placeholder="请输入用户名" class="comment_name" name="author">
         </div>
+
         <div class="form_group">
           <label>评论内容：</label>
-          <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
+          <textarea placeholder="请发表您的评论" class="comment_input" name="content"></textarea>
         </div>
         <div class="form_group">
-          <input type="submit" name="" value="评 论" class="comment_sub"></div>
+          <input type="submit" value="评 论" class="comment_sub"></div>
+        <input type="hidden" name="articleId" id="form_groupHidden">
+
       </form>
+
+
+
+
 
       <div class="comment_count">
         4条评论
@@ -143,49 +152,28 @@
       </div>
       <div class="common_wrap">
         <h3><i class="fa fa-commenting-o"></i> 最新评论</h3>
-        <ul class="content_list comment_list">
+        <ul class="content_list comment_list" id="comment_listBox">
+
+
+
           <li>
             <span>山</span>
             <b><em>山治</em> 9个月前(08-14)说:</b>
             <strong>挺会玩的</strong>
           </li>
-          <li>
-            <span>丽</span>
-            <b><em>丽丽</em> 9个月前(08-14)说:9个月前(08-14)说:9个月前(08-14)说:</b>
-            <strong>挺会玩的挺会玩的挺会玩的挺会玩的</strong>
-          </li>
-          <li>
-            <span>R</span>
-            <b><em>Rechael</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
-          <li>
-            <span>J</span>
-            <b><em>John</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
-          <li>
-            <span>段</span>
-            <b><em>段正淳</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
-          <li>
-            <span>乔</span>
-            <b><em>乔峰</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
+          
+
         </ul>
       </div>
       <div class="common_wrap">
         <h3><i class="fa fa-bullseye"></i> 焦点关注</h3>
-        <ul class="content_list guanzhu_list">
+        <ul class="content_list guanzhu_list" id="guanzhu_listBox">
+
+
           <li><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+          
+
+
         </ul>
       </div>
     </div>
@@ -209,10 +197,32 @@
   <script src="./js/jquery-1.12.4.min.js"></script>
   <script src="./js/template-web.js"></script>
 
-  <!-- 文章页面的 js 代码  -->
-  <script>
-
+  <!-- 最新评论模板 --> 
+  <script type="text/html" id="comment_listBoxTpl">
+    {{each data}}
+      <li>
+        <span>{{$value.author.substring(0,1)}}</span>
+          <b><em>{{$value.author}}</em>{{11-$value.date.substring(5,6)}} 个月前({{$value.date.substring(5,10)}})说:</b>
+          <strong>{{$value.intro}}</strong>
+        </li>
+    {{/each}}
   </script>
+
+  <!-- 焦点关注模板 -->
+   <script type="text/html" id="guanzhu_listBoxTpl">
+    {{each data}}
+
+    <li><a href="#">{{$value.intro}}</a></li>
+
+    {{/each}}
+  </script>
+  <!-- index 代码 -->
+  <script src="./js/index.js"></script>
+
+
+
+  <!-- 文章页面的 js 代码  -->
+  <script src="./js/article.js"></script>
 </body>
 
 </html>

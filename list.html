@@ -164,49 +164,29 @@
       </div>
       <div class="common_wrap">
         <h3><i class="fa fa-commenting-o"></i> 最新评论</h3>
-        <ul class="content_list comment_list">
+        <ul class="content_list comment_list" id="comment_listBox">
+
+
+
           <li>
             <span>山</span>
             <b><em>山治</em> 9个月前(08-14)说:</b>
             <strong>挺会玩的</strong>
           </li>
-          <li>
-            <span>丽</span>
-            <b><em>丽丽</em> 9个月前(08-14)说:9个月前(08-14)说:9个月前(08-14)说:</b>
-            <strong>挺会玩的挺会玩的挺会玩的挺会玩的</strong>
-          </li>
-          <li>
-            <span>R</span>
-            <b><em>Rechael</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
-          <li>
-            <span>J</span>
-            <b><em>John</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
-          <li>
-            <span>段</span>
-            <b><em>段正淳</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
-          <li>
-            <span>乔</span>
-            <b><em>乔峰</em> 9个月前(08-14)说:</b>
-            <strong>挺会玩的</strong>
-          </li>
+    
+
+
+
+
         </ul>
       </div>
       <div class="common_wrap">
         <h3><i class="fa fa-bullseye"></i> 焦点关注</h3>
-        <ul class="content_list guanzhu_list">
+        <ul class="content_list guanzhu_list" id="guanzhu_listBox">
           <li><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
-          <li><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
+         
+
+
         </ul>
       </div>
     </div>
@@ -225,7 +205,28 @@
     <p>CopyRight © 2019 深圳大事件信息技术股份有限公司 All Rights Reserved</p>
     <p>电话：0755-****888 粤ICP备*******8号</p>
   </div>
-
+  <script src="./js/template-web.js"></script>
+    <!-- 最新评论模板 -->
+    <script type="text/html" id="comment_listBoxTpl">
+      {{each data}}
+        <li>
+          <span>{{$value.author.substring(0,1)}}</span>
+            <b><em>{{$value.author}}</em>{{11-$value.date.substring(5,6)}} 个月前({{$value.date.substring(5,10)}})说:</b>
+            <strong>{{$value.intro}}</strong>
+          </li>
+      {{/each}}
+    </script>
+  
+    <!-- 焦点关注模板 -->
+    <script type="text/html" id="guanzhu_listBoxTpl">
+      {{each data}}
+  
+      <li><a href="#">{{$value.intro}}</a></li>
+  
+      {{/each}}
+    </script>
+    <!-- index 代码 -->
+    <script src="./js/index.js"></script>
 </body>
 
 </html>

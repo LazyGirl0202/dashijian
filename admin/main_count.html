@@ -16,7 +16,7 @@
   <div class="container-fluid">
     <div class="row spannel_list">
       <div class="col-sm-3 col-xs-6">
-        <div class="spannel">
+        <div class="spannel" id="scolor">
           <em>10015</em><span>篇</span>
           <b>总文章数</b>
         </div>
@@ -168,6 +168,24 @@
         }
       }
     });
+
+    //页面一进来就发送ajax请求,获取文章总数    日新增文章数  总评论数  日新增评论数
+    $.ajax({
+      url: 'http://47.111.184.55:8888/api/v1/admin/data/info',
+      success: function (data) {
+        console.log(data);
+        $('#scolor').html(`<em>${data.totalArticle}</em><span>篇</span>
+          <b>总文章数</b>`);
+        $('.scolor01').html(`<em>${data.dayArticle}</em><span>篇</span>
+          <b>日新增文章数</b>`);
+        $('.scolor02').html(`<em>${data.totalComment}</em><span>条</span>
+          <b>评论总数</b>`);
+        $('.scolor03').html(`<em>${data.dayComment}</em><span>条</span>
+          <b>日新增评论数</b>`);
+      }
+    })
+
+
 
 
     var oPie = echarts.init(document.getElementById('pie_show'));
