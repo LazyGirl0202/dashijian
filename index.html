@@ -15,7 +15,7 @@
   <div class="header">
     <a href="#" class="logo fl"><img src="images/logo.png" alt="logo"></a>
     <div class="search_form fl">
-      <input type="text" class="search_txt" placeholder="黑洞照片">
+      <input type="text" class="search_txt" id="search_txt" placeholder="黑洞照片">
       <button class="search_btn"><i class="fa fa-search"></i></button>
     </div>
     <div class="link_info fr">
@@ -210,7 +210,7 @@
     {{each data}}
       <li>
         <span>{{$value.author.substring(0,1)}}</span>
-          <b><em>{{$value.author}}</em>{{11-$value.date.substring(5,6)}} 个月前({{$value.date.substring(5,10)}})说:</b>
+          <b><em>{{$value.author}}</em>{{month-$value.date.substring(5,6)}} 个月前({{$value.date.substring(5,10)}})说:</b>
           <strong>{{$value.intro}}</strong>
         </li>
     {{/each}}
