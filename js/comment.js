@@ -50,14 +50,21 @@ $(function(){
           var id = $(this).attr('data-id')
           $.ajax({
             url: `http://47.111.184.55:8888/api/v1/admin/comment/delete`,
+            type: 'post',
             data: {
               id: id
             },
-            type: 'post',
+            
             success: function (data) {
               // console.log(data);
               location.reload()
+            },
+            error:function(data){
+              console.log(data);
+              
             }
+            
+
           })
         }
       })
