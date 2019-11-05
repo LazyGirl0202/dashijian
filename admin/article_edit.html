@@ -18,58 +18,8 @@
     <div class="common_title">
       文章编辑
     </div>
-    <div class="container-fluid common_con">
-      <form class="form-horizontal article_form">
-        <div class="form-group">
-          <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
-          <div class="col-sm-10">
-            <input type="email" name="title" class="form-control title" id="inputEmail3" value="文章标题文字">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
-          <div class="col-sm-10">
-            <img src="images/pic06.jpg" class="article_cover">
-            <input name="cover" type="file" id="exampleInputFile">
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
-          <div class="col-sm-4">
-            <select class="form-control category" name="categoryId">
-              <option>类别一</option>
-              <option>类别二</option>
-              <option>类别三</option>
-              <option selected>类别四</option>
-              <option>类别五</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputEmail3" class="col-sm-2 control-label">发布时间：</label>
-          <div class="col-sm-4">
+    <div class="container-fluid common_con" id="modifyBox">
 
-            <div class="input-group">
-              <input type="text" name="date" class="form-control" value="2019-05-17" id="dateinput">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
-                    class="iconfont icon-icondate"></i></button>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="rich_content" placeholder="文章内容" value="文章内容">
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success btn-edit">修改</button>
-          </div>
-        </div>
-      </form>
     </div>
   </div>
 
@@ -79,9 +29,140 @@
   <script src="js/tinymce/js/tinymce_setup.js"></script>
   <script src="./js/template-web.js"></script>
 
+  <!-- 文章编辑模板 -->
+  <script type="text/html" id="modifyTpl">
+    <form class="form-horizontal article_form" data-id="{{data.id}}" id="modifyForm" >
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">文章标题：</label>
+          <div class="col-sm-10">
+            <input type="text" name="title" class="form-control title" id="inputEmail3" value="{{data.title}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword3" class="col-sm-2 control-label">文章封面：</label>
+          <div class="col-sm-10">
+            <img src="{{data.cover.replace('http://172.16.19.30:8888','http://47.111.184.55:8888')}}" class="article_cover" id="images">
+            <input name="cover" type="file" id="exampleInputFile" value="{{data.cover}}">
+          </div>
+          <!-- 创建隐藏域 -->
+          <input type="hidden" name="thumbnail" id="thumbnail">
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">文章类别：</label>
+          <div class="col-sm-4">
+            <select class="form-control category" name="categoryId">
+              {{each categoryList.data}}
+                <option value="{{$value.id}}" {{data.categoryId == $value.id ? 'selected' : ''}}>{{$value.name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">发布时间：</label>
+          <div class="col-sm-4">
+
+            <div class="input-group">
+              <input type="text" name="date" class="form-control"  id="dateinput" value="{{data.date}}">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button"
+                  onclick="jeDate('#dateinput',{trigger:false,format: 'YYYY-MM-DD'})"><i
+                    class="iconfont icon-icondate"></i></button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="rich_content" placeholder="文章内容" value="{{data.content}}">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-success btn-edit">修改</button>
+          </div>
+        </div>
+      </form>
+  </script>
+
   <!-- 业务逻辑代码 -->
   <script>
-    
+    $(function () {
+      //文章编辑
+      //获取地址栏的id信息
+      var id = getUrlParams('id')
+      // 从浏览器的地址栏中获取查询参数
+      function getUrlParams(name) {
+        var paramsAry = location.search.substr(1).split('&');
+        // 循环数据
+        for (var i = 0; i < paramsAry.length; i++) {
+          var tmp = paramsAry[i].split('=');
+          if (tmp[0] == name) {
+            return tmp[1];
+          }
+        }
+        return -1;
+      }
+      //发送ajax请求，根据id查询文章信息
+      if (id != -1) {
+        $.ajax({
+          type: 'get',
+          url: `http://47.111.184.55:8888/api/v1/admin/article/search`,
+          data: { id: id },
+          success: function (data) {
+            // console.log(data)
+            $.ajax({
+              type: 'get',
+              url: `http://47.111.184.55:8888/api/v1/admin/category/list`,
+              success: function (response) {
+                // console.log(response)
+                data.categoryList = response
+                // console.log(data.categoryList.data)
+                var html = template('modifyTpl', data)
+                // console.log(html)
+                $('#modifyBox').html(html)
+              }
+            })
+          }
+        })
+      }
+
+
+      // 获取文件上传封面
+      $('#modifyBox').on('change', '#images', function () {
+        //获取用户上传的文件信息
+        var files = this.files[0]
+        // 将文件使用 URL.createObjectURL 转换成 url
+        var imgUrl = URL.createObjectURL(files)
+        // 将 生成的url赋值给 src
+        document.querySelector('#images').src = imgUrl
+        $('#thumbnail').val(imgUrl)
+      })
+
+      //将数据同步到数据库
+      $('#modifyBox').on('submit', '#modifyForm', function () {
+        var id = parseInt($(this).attr('data-id'));
+        // 获取表单数据
+        var formData = new FormData($('#modifyForm')[0]);
+        formData.append('id', id)
+        // console.log(formData)
+        // 发送ajax请求
+        $.ajax({
+          type: 'post',
+          url: `http://47.111.184.55:8888/api/v1/admin/article/edit`,
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            // console.log(response)
+            location.href = 'article_list.html'
+            // location.reload()
+          }
+        })
+        return false
+
+      })
+    })
   </script>
 </body>
 
