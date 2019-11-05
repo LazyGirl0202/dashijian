@@ -84,7 +84,10 @@
         <td class="text-center">
           {{if $value.state=='已拒绝'}}
           <a href="javascript:;" data-id="{{$value.id}}" class="btn btn-warning btn-xs pass" >通过</a>
+          {{else if($value.state=='已批准')}}
+          <a href="javascript:;" data-id="{{$value.id}}" class="btn btn-warning btn-xs reject" >不通过</a>
           {{else}}
+          <a href="javascript:;" data-id="{{$value.id}}" class="btn btn-warning btn-xs pass" >通过</a>
           <a href="javascript:;" data-id="{{$value.id}}" class="btn btn-warning btn-xs reject" >不通过</a>
           {{/if}}
           <a href="javascript:;" data-id="{{$value.id}}" class="btn btn-danger btn-xs delete">删除</a>
