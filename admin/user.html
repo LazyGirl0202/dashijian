@@ -17,35 +17,52 @@
     <div class="common_title">
       用户信息修改
     </div>
-    <div class="container-fluid common_con">
-      <form class="form-horizontal article_form">
+    <div class="container-fluid common_con" id="userFormBox">
+
+    </div>
+  </div>
+
+
+  <script src="js/jquery-1.12.4.min.js"></script>
+  <script src="js/template-web.js"></script>
+
+  <!-- 用户信息模板 -->
+  <script type="text/html" id="userTpl">
+    <form class="form-horizontal article_form" id="userForm">
         <div class="form-group">
           <label for="inputEmail3" class="col-sm-2 control-label">用户名称：</label>
           <div class="col-sm-4">
-            <input type="text" name="username" class="form-control username" id="inputEmail3" value="李思思">
+            <input type="text" name="username" class="form-control username" id="inputEmail3" value="{{data.username}}">
           </div>
         </div>
         <div class="form-group">
           <label for="inputEmail3" class="col-sm-2 control-label">昵称：</label>
           <div class="col-sm-4">
-            <input type="text" name="nickname" class="form-control nickname" id="inputEmail3" value="思思">
+            <input type="text" name="nickname" class="form-control nickname" id="inputEmail3" value="{{data.nickname}}">
           </div>
         </div>
         <div class="form-group">
           <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
           <div class="col-sm-4">
-            <input type="text" name="email" class="form-control email" id="inputEmail3" value="lisisi@126.com">
+            <input type="text" name="email" class="form-control email" id="inputEmail3" value="{{data.email}}">
           </div>
         </div>
 
         <div class="form-group">
           <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
           <div class="col-sm-10">
-            <img src="images/2.jpg" alt="" class="user_pic">
-            <input style="display: none" name="userPic" type="file" id="exampleInputFile">
+
+
+            <img src="{{data.userPic.replace('http://172.16.19.30:8888','http://47.111.184.55:8888')}}" alt="" id="picture" class="user_pic">
+            <input style="display: none" name="userPic" type="file" id="exampleInputFile"> 
             <!-- 给label标签的for属性赋值,值是input标签的id,那这样的话点击label就相当于点击了input -->
+             <!-- 隐藏域 -->
+             <input type="hidden" id="imgHidden" name="user_pic" >
             <br>
             <label for="exampleInputFile">
+             
+
+
               <img src="./images/uploads_icon.jpg" style="height: 50px;" alt="">
             </label>
           </div>
@@ -54,26 +71,77 @@
         <div class="form-group">
           <label for="inputEmail3" class="col-sm-2 control-label">密码：</label>
           <div class="col-sm-4">
-            <input type="password" name="password" class="form-control password" id="inputEmail3" value="12345678">
+            <input type="password" name="password" class="form-control password" id="inputEmail3" >
           </div>
         </div>
 
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success btn-edit">修改</button>
+            <button type="submit" class="btn btn-success btn-edit" id="modify">修改</button>
           </div>
         </div>
       </form>
-    </div>
-  </div>
-
-
-  <script src="js/jquery-1.12.4.min.js"></script>
+  </script>
 
   <!-- 业务逻辑代码 -->
   <script>
 
+    $(function () {//入口函数
+
+      //21.发送ajax，获取用户详情
+
+      $.ajax({
+        url: 'http://47.111.184.55:8888/api/v1/admin/user/detail',
+        type: 'get',
+        success: function (data) {
+          var html = template('userTpl', data)
+          $('#userFormBox').html(html)
+        }
+      })
+
+      //22点击修改后渲染页面 获取form表单，添加提交事件并阻止默认提交行为-----
+
+      $('#userFormBox').on('change', '#exampleInputFile', function () {
+        // 使用 this.files[0] 伪数组结合下标获取到文件
+        var files = this.files[0]
+        // 将文件使用 URL.createObjectURL 转换成 url
+        var imgUrl = URL.createObjectURL(files)
+        console.log(imgUrl);
+
+        $('#picture').attr('src', imgUrl)// 将 生成的 url 赋值给 src
+        $('#imgHidden').val(imgUrl)
+      })
+
+
+      $('#userFormBox').on('submit', '#userForm', function () {
+
+        //获取上传的文件信息
+        var formData = new FormData($('#userForm')[0])
+        console.log(formData);
+
+        //发送Ajax请求
+        $.ajax({
+          type: 'post',
+          url: 'http://47.111.184.55:8888/api/v1/admin/user/edit',
+          data: formData,
+          cache: false,
+          contentType: false,
+          processData: false,
+          success: function (data) {
+            console.log(data);
+            location.reload()
+          },
+          error: function () {
+            alert('头像修改失败')
+          }
+        })
+        return false
+      })
+
+
+    })
   </script>
 </body>
+
 </html>
