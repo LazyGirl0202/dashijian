@@ -15,8 +15,8 @@
   <div class="header">
     <a href="#" class="logo fl"><img src="images/logo.png" alt="logo"></a>
     <div class="search_form fl">
-      <input type="text" class="search_txt" placeholder="黑洞照片">
-      <button class="search_btn"><i class="fa fa-search"></i></button>
+      <input type="text" class="search_txt" placeholder="黑洞照片" id="keys">
+      <button class="search_btn" id="icon-search"><i class="fa fa-search"></i></button>
     </div>
     <div class="link_info fr">
       <a href="#"><i class="fa fa-angle-right"></i>&nbsp;&nbsp;网站地图</a><br>
@@ -28,7 +28,7 @@
     <div class="menu">
       <div class="menu_collapse fl">
         <a href="javascript:;" class="level_one"><i class="fa fa-list-ul"></i>全部分类</a>
-        <ul class="level_two">
+        <ul class="level_two" id="leveler">
           <li class="up"></li>
           <li><a href="#">最 新</a></li>
           <li><a href="#">科 技</a></li>
@@ -38,7 +38,7 @@
           <li><a href="#">公 司</a></li>
         </ul>
       </div>
-      <ul class="left_menu fl">
+      <ul class="left_menu fl" id="lefter">
         <li><a href="#">最 新</a></li>
         <li><a href="#">科 技</a></li>
         <li><a href="#">股 市</a></li>
@@ -55,27 +55,8 @@
 
   <div class="main_con clearfix">
     <div class="left_con">
-      <ul class="focus_list">
-        <li class="first">
-          <a href="#"><img src="images/pic01.jpg" alt=""></a>
-          <p>图片说明</p>
-        </li>
-        <li>
-          <a href="#"><img src="images/pic02.jpg" alt=""></a>
-          <p>图片说明图片说明图片说明图片说明图片说明图片说明图片说明图片说明图片说明</p>
-        </li>
-        <li>
-          <a href="#"><img src="images/pic03.jpg" alt=""></a>
-          <p>图片说明</p>
-        </li>
-        <li>
-          <a href="#"><img src="images/pic05.jpg" alt=""></a>
-          <p>图片说明</p>
-        </li>
-        <li>
-          <a href="#"><img src="images/pic06.jpg" alt=""></a>
-          <p>图片说明</p>
-        </li>
+      <ul class="focus_list" id="focusch">
+
       </ul>
 
       <div class="common_title">
@@ -147,7 +128,7 @@
     <div class="right_con">
       <div class="common_wrap">
         <h3><i class="fa fa-bar-chart"></i> 一周热门排行</h3>
-        <ul class="content_list hotList">
+        <ul class="content_list hotList" id="constent">
           <li><span class="first">1</span><a href="#">神奇的水滴摄影，泡泡中的世界泡泡中的世界</a></li>
           <li><span class="second">2</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
           <li><span class="third">3</span><a href="#">神奇的水滴摄影，泡泡中的世界</a></li>
@@ -224,8 +205,37 @@
   <script src="./js/jquery-1.12.4.min.js"></script>
   <script src="./js/template-web.js"></script>
 
+  <!-- 全部分类模块 -->
+  <script type="text/html" id="levelTpl">
+    <li class="up"></li>
+    {{each data.slice(0,5)}}
+    <li id="{{$value.id}}"><a href="javascript:;">{{$value.name}}</a></li>
+    {{/each}}
+  </script>
+
+  <!-- 热点图模块 -->
+  <script type="text/html" id="focuschTpl">
+    {{each data}}
+    <li>
+        <a href="javascript:;"><img src="{{$value.cover == null ? 'images/pic01.jpg' : $value.cover}}" alt=""></a>
+        <p>图片说明</p>
+    </li>
+    {{/each}}
+  </script>
+
+  <!-- 一周热门排行 -->
+  <script type="text/html" id="contentTpl">
+    {{each data.slice(0,7)}}
+    <li><span>{{$index+1}}</span><a href="javascript:;">{{$value.title}}</a></li>
+    {{/each}}
+  </script>
+  <script src="./js/chart.js"></script>
+  <script src="./js/public.js"></script>
+
+
   <!-- index 代码 -->
   <script>
+    
   </script>
 </body>
 
